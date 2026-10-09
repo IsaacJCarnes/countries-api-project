@@ -16,9 +16,9 @@
     "url": "https://github.com/IsaacJCarnes/countries-api-project/issues"
   },
   "homepage": "https://github.com/IsaacJCarnes/countries-api-project#readme",
-  "description": "",
   "devDependencies": {
     "@types/node": "^26.6.4",
     "typescript": "^7.0.2"
-  }
+  },
+  "description": ""
 }

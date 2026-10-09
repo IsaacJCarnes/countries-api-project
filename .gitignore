@@ -1,2 +1,10 @@
 node_modules/
 dist/
+design/
+src/script.js
+*.sketch
+
+*.xd
+*.fig
+
+.DS_Store
