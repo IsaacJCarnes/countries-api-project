@@ -3,7 +3,7 @@
 
     "module": "es2022",
     "target": "esnext",
-    "types": [],
+    "types": ["node"],
 
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
