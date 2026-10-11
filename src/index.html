@@ -15,21 +15,73 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="utility.css" />
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="script.js" defer></script>
   </head>
   <body>
     <header>
-      <h1 class="txt-lg">Where in the world?</h1>
-      <div id="light-mode-container">
-        <i id="light-mode-icon" class="fa fa-regular fa-moon"></i>
-        <button id="light-mode-button">Dark Mode</button>
-      </div>
+      <h1>Where in the world?</h1>
+
+      <button id="light-mode-button">
+        <span id="light-mode-icon" class="fa fa-regular fa-moon"></span>
+        <span>Dark Mode</span>
+      </button>
     </header>
     <main>
-      <section id="filter-container"><input id="filter-search" /></section>
-      <select id="filter-region"></select>
-      <ul id="country-list"></ul>
+      <section>
+        <section id="filter-container"><input id="filter-search" /></section>
+        <select id="filter-region"></select>
+        <ul id="country-list"></ul>
+      </section>
+      <details class="flx-col">
+        <summary></summary>
+        <button class="txt-sm" id="details-back"><span  class="fa fa-arrow-left"></span>Back</button>
+        <section class="fill flx">
+          <image id="details-image"></image>
+          <div class="flx-col" id="details-holder">
+            <h3 id="details-name"></h3>
+            <ul>
+              <dl>
+              <dt>Native Name: </b>
+              <dd id="details-native"></dd>
+              </dl>
+              <dl>
+                <dt>Population: </b>
+                <dd id="details-population"></dd>
+              </dl>
+              <dl>
+              <dt>Region: </b>
+              <dd id="details-region"></dd>
+              </dl>
+              <dl>
+              <dt>Subregion: </b>
+              <dd id="details-subregion"></dd>
+              </dl>
+              <dl>
+              <dt>Capital: </b>
+              <dd id="details-capital"></dd>
+              </dl>
+              <dl>
+              <dt>Top Level Domain:</b>
+              <dd id="details-tlds"></dd>
+              </dl>
+              <dl>
+              <dt>Currencies: </b>
+              <dd id="details-currencies"></dd>
+              </dl>
+              <dl>
+              <dt>Languages: </b>
+              <dd id="details-languages"></dd>
+              </dl>
+            </ul>
+            <dl>
+              <dt>Border Countries:</dt>
+              <dd id="details-borders"></dd>
+            </dl>
+          </div>
+        </section>
+      </details>
     </main>
   </body>
 </html>
