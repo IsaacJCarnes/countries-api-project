@@ -40,6 +40,7 @@ validateListener(detailsBackButton, "click", () => {
     detailsModal.open = !detailsModal.open;
   }
 });
+//Populate details page with details from index of targetted button
 validateListener(detailsBorders, "click", (e) => {
   if (e.target instanceof HTMLElement) {
     if (e.target.tagName !== "BUTTON") return;
