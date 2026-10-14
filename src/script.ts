@@ -1,3 +1,10 @@
+import { type Country } from "./models/Country.js";
+import {
+  getLocallyStoredData,
+  setLocallyStoredData,
+} from "./services/localStorage.js";
+import { getCountryData } from "./services/apiService.js";
+//Light Mode
 const lightModeIcon = document.getElementById("light-mode-icon");
 const lightModeButton = document.getElementById("light-mode-button");
 //Filter
@@ -20,22 +27,7 @@ const detailsCurrencies = document.getElementById("details-currencies");
 const detailsLanguages = document.getElementById("details-languages");
 const detailsBorders = document.getElementById("details-borders");
 
-type country = {
-  index: number;
-  name: string;
-  nativeName: string;
-  population: number;
-  region: string;
-  subregion: string;
-  capital: string;
-  tlds: string;
-  currencies: string[];
-  languages: string[];
-  borders: string[];
-  code: string;
-  flagUrl: string;
-};
-let countryArray: country[] = [];
+let countryArray: Country[] = [];
 
 //Toggle light/dark mode on button click
 validateListener(lightModeButton, "click", () => {
@@ -59,16 +51,13 @@ async function onStartup() {
   lightModeIcon?.classList.toggle("fa-regular");
   document.body.classList.toggle("dark-mode");
 
-  //Attempt to get/reduce country array from country API
-  const countryData = await getCountryData();
-  if (countryData?.data?.objects)
-    countryArray = reduceCountryArray(countryData.data.objects);
-  //If country array is still empty (failure result), assign country array to fallback data
-  if (countryArray.length === 0) {
-    console.error("Could not recieve API data, using fallback data");
-    // @ts-expect-error fallback-data.js does not provide TypeScript declarations.
-    const importedArray: Array = await import("../assets/fallback-data.js");
-    countryArray = importedArray['default'];
+  let localData = getLocallyStoredData();
+  if (!localData) {
+    countryArray = await getCountryData();
+    setLocallyStoredData(countryArray);
+  } else {
+    console.log("Defaulting to local recent storage");
+    countryArray = localData;
   }
   //Add index to country array for later lookups
   countryArray.forEach((country, index) => (country.index = index));
@@ -113,63 +102,6 @@ function populateDetailsPage(index: number) {
       detailsBorders.appendChild(borderButton);
     });
   }
-}
-
-function reduceCountryArray(inputArray: Array<any>): country[] {
-  return inputArray.map((country: any) => {
-    //Native Name
-    const nativeNames = country["names"]?.["native"] ?? {};
-    const firstNativeKey = Object.keys(nativeNames)[0];
-    const nativeNameType = firstNativeKey
-      ? (nativeNames[firstNativeKey] as Record<string, string> | undefined)
-      : undefined;
-    const firstTypeKey = nativeNameType ? Object.keys(nativeNameType)[0] : "";
-    const nativeName =
-      nativeNameType && firstTypeKey
-        ? (nativeNameType[firstTypeKey] ?? "")
-        : "";
-    //Country Capital
-    const capital: string = country["capitals"][0]?.name;
-    //Country Currencies
-    const currencies = country["currencies"].map(
-      (currency: Record<string, string>) => currency?.name,
-    );
-    //Country Languages
-    const languages = country["languages"].map(
-      (language: Record<string, string>) => language?.name,
-    );
-    return {
-      index: country["index"],
-      name: country["names"]["common"],
-      nativeName: nativeName,
-      population: country["population"],
-      region: country["region"],
-      subregion: country["subregion"],
-      capital: capital,
-      tlds: country["tlds"],
-      currencies: currencies,
-      languages: languages,
-      borders: country["borders"],
-      code: country["codes"]["alpha_3"],
-      flagUrl: country["flag"]["url_svg"],
-    };
-  });
-}
-
-async function getCountryData() {
-  const response = await fetch(
-    "https://countries-api-project.isaacjdeveloper.workers.dev/countries/v5?limit=100&offset=200",
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
-  if (!response.ok) {
-    throw new Error("Could not get API data");
-  }
-  const jsonResponse = await response.json();
-  return jsonResponse;
 }
 
 //validateListener ensures the target HTMLElement exists before adding the event listener

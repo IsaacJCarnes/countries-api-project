@@ -2,7 +2,8 @@ node_modules/
 dist/
 design/
 env.js
-src/script.js
+src/*.js
+src/*/*.js
 *.sketch
 
 *.xd
