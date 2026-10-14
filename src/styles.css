@@ -44,7 +44,7 @@ header {
   box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
-main{
+main {
   position: relative;
   width: auto;
   height: 100%;
@@ -55,7 +55,6 @@ h1 {
   font-size: 25px;
   margin: 20px;
 }
-
 
 #light-mode-button {
   display: flex;
@@ -84,7 +83,7 @@ details {
   background-color: var(--bg-color);
 }
 
-details[open]{
+details[open] {
   display: inherit;
 }
 
@@ -92,23 +91,17 @@ summary::marker {
   content: "";
 }
 
-#details-back{
-  background-color: var(--elements-color);
-  border: unset;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.1);
-  width: 125px;
+#details-back {
   height: 35px;
   margin-left: 10px;
-  cursor: pointer;
   margin-bottom: 50px;
 }
 
-#details-back span{
-  margin-right:10px;
+#details-back span {
+  margin-right: 10px;
 }
 
-details section{
+details section {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -116,7 +109,7 @@ details section{
   width: 100%;
 }
 
-details ul{
+details ul {
   display: flex;
   flex-direction: column;
   padding: 0px;
@@ -126,16 +119,36 @@ details ul{
   flex-wrap: wrap;
 }
 
-dl{
+#details-borders{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#details-borders .basicButton{
+  height: 30px;
+}
+
+.basicButton {
+  background-color: var(--elements-color);
+  border: unset;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.1);
+  width: 125px;
+  cursor: pointer;
+}
+
+dl {
   display: flex;
   width: fit-content;
 }
-dt, dd{
+dt,
+dd {
   font-size: 14px;
   font-weight: 300;
   margin: 0px;
 }
 
-dd{
+dd {
   margin-left: 5px;
 }

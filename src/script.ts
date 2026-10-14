@@ -21,12 +21,13 @@ const detailsLanguages = document.getElementById("details-languages");
 const detailsBorders = document.getElementById("details-borders");
 
 type country = {
+  index: number;
   name: string;
   nativeName: string;
   population: number;
   region: string;
   subregion: string;
-  capitals: string[];
+  capital: string;
   tlds: string;
   currencies: string[];
   languages: string[];
@@ -47,13 +48,30 @@ validateListener(detailsBackButton, "click", () => {
     detailsModal.open = !detailsModal.open;
   }
 });
+validateListener(detailsBorders, "click", (e) => {
+  if (e.target instanceof HTMLElement) {
+    if (e.target.tagName !== "BUTTON") return;
+    populateDetailsPage(Number(e.target.dataset.index));
+  }
+});
 
 async function onStartup() {
   lightModeIcon?.classList.toggle("fa-regular");
   document.body.classList.toggle("dark-mode");
-  
+
+  //Attempt to get/reduce country array from country API
   const countryData = await getCountryData();
-  countryArray = reduceCountryArray(countryData.data.objects)
+  if (countryData?.data?.objects)
+    countryArray = reduceCountryArray(countryData.data.objects);
+  //If country array is still empty (failure result), assign country array to fallback data
+  if (countryArray.length === 0) {
+    console.error("Could not recieve API data, using fallback data");
+    // @ts-expect-error fallback-data.js does not provide TypeScript declarations.
+    const importedArray: Array = await import("../assets/fallback-data.js");
+    countryArray = importedArray['default'];
+  }
+  //Add index to country array for later lookups
+  countryArray.forEach((country, index) => (country.index = index));
 
   populateDetailsPage(1);
   if (detailsModal) {
@@ -65,7 +83,6 @@ onStartup();
 
 function populateDetailsPage(index: number) {
   const country = countryArray[index];
-  console.log(country);
   if (!country) {
     throw new Error("Requested index outside array bounds");
   }
@@ -74,14 +91,28 @@ function populateDetailsPage(index: number) {
   if (detailsName) detailsName.textContent = country.name;
   if (detailsNative) detailsNative.textContent = country.nativeName;
   if (detailsPopulation)
-    detailsPopulation.textContent = "" + country.population;
+    detailsPopulation.textContent = country.population.toLocaleString("en-US");
   if (detailsRegion) detailsRegion.textContent = country.region;
   if (detailsSubregion) detailsSubregion.textContent = country.subregion;
-  if (detailsCapital) detailsCapital.textContent = country.capitals;
+  if (detailsCapital) detailsCapital.textContent = country.capital;
   if (detailsTlds) detailsTlds.textContent = country.tlds;
-  if (detailsCurrencies) detailsCurrencies.textContent = country.currencies;
-  if (detailsLanguages) detailsLanguages.textContent = country.languages;
-  if (detailsBorders) detailsBorders.textContent = country.borders;
+  if (detailsCurrencies)
+    detailsCurrencies.textContent = prettifyArray(country.currencies);
+  if (detailsLanguages)
+    detailsLanguages.textContent = prettifyArray(country.languages);
+  const borderCountries = countryArray.filter((borderCountry) =>
+    country.borders.includes(borderCountry.code),
+  );
+  if (detailsBorders) {
+    detailsBorders.textContent = "";
+    borderCountries.forEach((borderCountry) => {
+      let borderButton = document.createElement("button");
+      borderButton.classList.add("basicButton");
+      borderButton.dataset.index = "" + borderCountry.index;
+      borderButton.textContent = borderCountry.name;
+      detailsBorders.appendChild(borderButton);
+    });
+  }
 }
 
 function reduceCountryArray(inputArray: Array<any>): country[] {
@@ -89,20 +120,35 @@ function reduceCountryArray(inputArray: Array<any>): country[] {
     //Native Name
     const nativeNames = country["names"]?.["native"] ?? {};
     const firstNativeKey = Object.keys(nativeNames)[0];
-    const nativeNameType = firstNativeKey ? (nativeNames[firstNativeKey] as Record<string, string> | undefined) : undefined;
+    const nativeNameType = firstNativeKey
+      ? (nativeNames[firstNativeKey] as Record<string, string> | undefined)
+      : undefined;
     const firstTypeKey = nativeNameType ? Object.keys(nativeNameType)[0] : "";
-    const nativeName = nativeNameType && firstTypeKey ? (nativeNameType[firstTypeKey] ?? "") : "";
-
+    const nativeName =
+      nativeNameType && firstTypeKey
+        ? (nativeNameType[firstTypeKey] ?? "")
+        : "";
+    //Country Capital
+    const capital: string = country["capitals"][0]?.name;
+    //Country Currencies
+    const currencies = country["currencies"].map(
+      (currency: Record<string, string>) => currency?.name,
+    );
+    //Country Languages
+    const languages = country["languages"].map(
+      (language: Record<string, string>) => language?.name,
+    );
     return {
+      index: country["index"],
       name: country["names"]["common"],
       nativeName: nativeName,
       population: country["population"],
       region: country["region"],
       subregion: country["subregion"],
-      capitals: country["capitals"],
+      capital: capital,
       tlds: country["tlds"],
-      currencies: country["currencies"],
-      languages: country["languages"],
+      currencies: currencies,
+      languages: languages,
       borders: country["borders"],
       code: country["codes"]["alpha_3"],
       flagUrl: country["flag"]["url_svg"],
@@ -123,7 +169,6 @@ async function getCountryData() {
     throw new Error("Could not get API data");
   }
   const jsonResponse = await response.json();
-  console.log(jsonResponse.data.objects)
   return jsonResponse;
 }
 
@@ -132,9 +177,16 @@ type eventTrigger = "click"; //| "input"
 function validateListener(
   target: HTMLElement | null,
   eventType: eventTrigger,
-  callback: () => void,
+  callback: (e: Event) => void,
 ) {
   if (target) {
     target.addEventListener(eventType, callback);
   }
+}
+
+//Turns an array into a comma and space seperated string
+function prettifyArray(array: Array<any>): string {
+  return array.reduce((prevVal, curVal, currentIndex) =>
+    currentIndex == 0 ? curVal : prevVal + ", " + curVal,
+  );
 }
