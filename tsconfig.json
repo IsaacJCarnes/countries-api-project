@@ -4,6 +4,8 @@
     "module": "es2022",
     "target": "esnext",
     "types": ["node"],
+    "rootDir": "./src",
+    "outDir": "./public",
 
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,

@@ -1,12 +1,5 @@
 node_modules/
-dist/
+public/*/*.js
+public/*.js
 design/
-env.js
-src/*.js
-src/*/*.js
-*.sketch
-
-*.xd
-*.fig
-
 .DS_Store
