@@ -63,10 +63,11 @@ async function onStartup() {
   //Add index to country array for later lookups
   countryArray.forEach((country, index) => (country.index = index));
 
-  populateDetailsPage(1);
-  if (detailsModal) {
-    detailsModal.open = true;
-  }
+  console.log(countryArray[30])
+  //populateDetailsPage(1);
+  //if (detailsModal) {
+  //  detailsModal.open = true;
+  //}
 }
 
 onStartup();
@@ -97,7 +98,7 @@ function populateDetailsPage(index: number) {
     detailsBorders.textContent = "";
     borderCountries.forEach((borderCountry) => {
       let borderButton = document.createElement("button");
-      borderButton.classList.add("basicButton");
+      borderButton.classList.add("basicElement");
       borderButton.dataset.index = "" + borderCountry.index;
       borderButton.textContent = borderCountry.name;
       detailsBorders.appendChild(borderButton);
