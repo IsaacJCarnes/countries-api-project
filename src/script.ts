@@ -12,6 +12,8 @@ const filterSearchInput = document.getElementById("filter-search");
 const filterRegionInput = document.getElementById("filter-region");
 //List
 const countryList = document.getElementById("country-list");
+const countryItemTemplate = countryList?.firstElementChild as HTMLElement;
+
 //Details
 const detailsModal = document.querySelector<HTMLDetailsElement>("details");
 const detailsBackButton = document.getElementById("details-back");
@@ -63,7 +65,11 @@ async function onStartup() {
   //Add index to country array for later lookups
   countryArray.forEach((country, index) => (country.index = index));
 
-  console.log(countryArray[30])
+  //Clear country item template in html
+  if (countryList) countryList.textContent = "";
+  console.log(countryArray[30]);
+  addCountryitem(1);
+  addCountryitem(2);
   //populateDetailsPage(1);
   //if (detailsModal) {
   //  detailsModal.open = true;
@@ -71,6 +77,30 @@ async function onStartup() {
 }
 
 onStartup();
+
+function addCountryitem(index: number) {
+  if (countryList && countryItemTemplate) {
+    const countryData = countryArray[index] as Country;
+    const newCountryItem = countryItemTemplate.cloneNode(true) as HTMLElement;
+    
+    const countryImg = newCountryItem.querySelector(".country-image") as HTMLImageElement;
+    if (countryImg) countryImg.src = countryData.flagUrl;
+    
+    const countryName = newCountryItem.querySelector(".country-name");
+    if (countryName) countryName.textContent = countryData.name;
+    
+    const countryPopulation = newCountryItem.querySelector(".country-population");
+    if (countryPopulation) countryPopulation.textContent = countryData.population.toLocaleString("en-US");
+    
+    const countryRegion = newCountryItem.querySelector(".country-region");
+    if (countryRegion) countryRegion.textContent = countryData.region;
+    
+    const countryCapital = newCountryItem.querySelector(".country-capital");
+    if (countryCapital) countryCapital.textContent = countryData.capital;
+    
+    countryList.appendChild(newCountryItem);
+  }
+}
 
 function populateDetailsPage(index: number) {
   const country = countryArray[index];
