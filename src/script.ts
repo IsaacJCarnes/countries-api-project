@@ -75,7 +75,6 @@ validateListener(countryList, "click", (e) => {
   if (target) {
     const countryItem = target.closest(".country-item") as HTMLElement;
     if (!countryItem) return;
-    console.log(countryItem)
     populateDetailsPage(Number(countryItem.dataset.id));
     openDetailsModal();
   }
