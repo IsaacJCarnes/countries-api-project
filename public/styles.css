@@ -134,6 +134,7 @@ h1 {
   font-size: 14px;
   gap: 5px;
   padding-bottom: 30px;
+  justify-self: center;
 }
 
 .country-item > * {

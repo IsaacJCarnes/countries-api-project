@@ -8,8 +8,12 @@ import { getCountryData } from "./services/apiService.js";
 const lightModeIcon = document.getElementById("light-mode-icon");
 const lightModeButton = document.getElementById("light-mode-button");
 //Filter
-const filterSearchInput = document.getElementById("filter-search");
-const filterRegionInput = document.getElementById("filter-region");
+const filterSearchInput = document.getElementById(
+  "filter-search",
+) as HTMLInputElement;
+const filterRegionInput = document.getElementById(
+  "filter-region",
+) as HTMLSelectElement;
 //List
 const countryList = document.getElementById("country-list");
 const countryItemTemplate = countryList?.firstElementChild as HTMLElement;
@@ -30,8 +34,10 @@ const detailsLanguages = document.getElementById("details-languages");
 const detailsBorders = document.getElementById("details-borders");
 
 let countryArray: Country[] = [];
-let startCountryIndex = 0
-const countriesShownAmount = 8
+let startCountryIndex = 0;
+const countriesShownAmount = 8;
+let filteredRegion = "";
+let filteredName = "";
 
 //Toggle light/dark mode on button click
 validateListener(lightModeButton, "click", () => {
@@ -49,6 +55,22 @@ validateListener(detailsBorders, "click", (e) => {
   if (e.target instanceof HTMLElement) {
     if (e.target.tagName !== "BUTTON") return;
     populateDetailsPage(Number(e.target.dataset.index));
+  }
+});
+
+validateListener(filterSearchInput, "input", (e) => {
+  e.preventDefault();
+  if (e.target instanceof HTMLInputElement) {
+    filteredName = e.target.value;
+    renderCountryList();
+  }
+});
+
+validateListener(filterRegionInput, "change", (e) => {
+  e.preventDefault();
+  if (e.target instanceof HTMLSelectElement) {
+    filteredRegion = e.target.value;
+    renderCountryList();
   }
 });
 
@@ -74,14 +96,19 @@ onStartup();
 function renderCountryList() {
   //Clear country item template in html
   if (countryList) countryList.textContent = "";
-  for(let i = startCountryIndex; i < startCountryIndex + countriesShownAmount; i++){
-    addCountryitem(i)
+  let filteredCountries: Country[] = filterCountryArray();
+  for (
+    let i = startCountryIndex;
+    i < startCountryIndex + countriesShownAmount;
+    i++
+  ) {
+    const country = filteredCountries[i];
+    if (country) addCountryitem(country);
   }
 }
 
-function addCountryitem(index: number) {
+function addCountryitem(countryData: Country) {
   if (countryList && countryItemTemplate) {
-    const countryData = countryArray[index] as Country;
     const newCountryItem = countryItemTemplate.cloneNode(true) as HTMLElement;
 
     const countryImg = newCountryItem.querySelector(
@@ -107,6 +134,14 @@ function addCountryitem(index: number) {
 
     countryList.appendChild(newCountryItem);
   }
+}
+
+function filterCountryArray() {
+  return countryArray.filter(
+    (country: Country) =>
+      country.name.toLowerCase().includes(filteredName) &&
+      country.region.includes(filteredRegion),
+  );
 }
 
 function populateDetailsPage(index: number) {
@@ -144,7 +179,7 @@ function populateDetailsPage(index: number) {
 }
 
 //validateListener ensures the target HTMLElement exists before adding the event listener
-type eventTrigger = "click"; //| "input"
+type eventTrigger = "click" | "change" | "select" | "input";
 function validateListener(
   target: HTMLElement | null,
   eventType: eventTrigger,
