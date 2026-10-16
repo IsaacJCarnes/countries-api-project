@@ -4,7 +4,10 @@ body {
   height: 100%;
   margin: 0px;
   padding: 0px;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 :root {
@@ -13,6 +16,7 @@ body {
   --text-color: hsl(200, 15%, 8%);
   --input-color: hsl(0, 0%, 52%);
   --elements-color: hsl(0, 0%, 100%);
+  --section-padding: 50px;
 }
 
 body.dark-mode {
@@ -42,13 +46,16 @@ header {
   background-color: var(--elements-color);
   padding: 0px 40px;
   box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
+  height: 70px;
 }
 
 main {
   position: relative;
-  width: auto;
+  display: flex;
+  width: 100%;
   height: 100%;
-  margin: 50px;
+  margin: 0px;
+  padding: 0px;
 }
 
 h1 {
@@ -71,21 +78,23 @@ h1 {
 /* Country List */
 
 #country-list-section{
+  padding: var(--section-padding);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 40px;
   width: 100%;
-  height: calc(100% - 40px);
   
 }
 #filter-section {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 100%;
   justify-content: space-between;
   height: 40px;
+  padding: 30px;
 }
 
 #filter-name {
@@ -119,7 +128,7 @@ h1 {
   display: grid;
   height: 100%;
   width: 100%;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 40px;
   padding: 0px;
 }
@@ -162,20 +171,26 @@ h1 {
 details {
   display: none;
   position: absolute;
-  top: 0;
-  height: 100%;
-  width: 100%;
+  padding: var(--section-padding);
+  top: 0px;
+  left: 0px;
+  height: calc(100% - var(--section-padding) * 2);
+  width: calc(100% - var(--section-padding) * 2);
   font-size: 16px;
   content: "";
   background-color: var(--bg-color);
 }
 
 details[open] {
-  display: inherit;
+  display: block;
 }
 
 summary::marker {
   content: "";
+}
+
+#details-image{
+  width: 60%;
 }
 
 #details-back {
@@ -193,8 +208,7 @@ details section {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 130px;
-  width: 100%;
+  flex-direction: column;
 }
 
 details ul {
@@ -245,4 +259,32 @@ dd {
 
 input::placeholder {
   color: var(--input-color);
+}
+
+
+@media screen and (min-width: 600px) {
+  #country-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #filter-section {
+    flex-direction: row;
+    padding: 0px;
+  }
+
+  details section {
+  flex-direction: row;
+}
+}
+
+@media screen and (min-width: 900px) {
+  #country-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #country-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }

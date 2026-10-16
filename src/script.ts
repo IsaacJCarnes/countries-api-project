@@ -46,9 +46,7 @@ validateListener(lightModeButton, "click", () => {
 });
 //Toggle details page on back button click
 validateListener(detailsBackButton, "click", () => {
-  if (detailsModal) {
-    detailsModal.open = !detailsModal.open;
-  }
+  openDetailsModal(false);
 });
 //Populate details page with details from index of targetted button
 validateListener(detailsBorders, "click", (e) => {
@@ -59,7 +57,6 @@ validateListener(detailsBorders, "click", (e) => {
 });
 
 validateListener(filterSearchInput, "input", (e) => {
-  e.preventDefault();
   if (e.target instanceof HTMLInputElement) {
     filteredName = e.target.value;
     renderCountryList();
@@ -67,10 +64,20 @@ validateListener(filterSearchInput, "input", (e) => {
 });
 
 validateListener(filterRegionInput, "change", (e) => {
-  e.preventDefault();
   if (e.target instanceof HTMLSelectElement) {
     filteredRegion = e.target.value;
     renderCountryList();
+  }
+});
+
+validateListener(countryList, "click", (e) => {
+  const target = e.target as HTMLElement
+  if (target) {
+    const countryItem = target.closest(".country-item") as HTMLElement;
+    if (!countryItem) return;
+    console.log(countryItem)
+    populateDetailsPage(Number(countryItem.dataset.id));
+    openDetailsModal();
   }
 });
 
@@ -110,6 +117,7 @@ function renderCountryList() {
 function addCountryitem(countryData: Country) {
   if (countryList && countryItemTemplate) {
     const newCountryItem = countryItemTemplate.cloneNode(true) as HTMLElement;
+    newCountryItem.dataset.id = "" + countryData.index;
 
     const countryImg = newCountryItem.querySelector(
       ".country-image",
@@ -175,6 +183,12 @@ function populateDetailsPage(index: number) {
       borderButton.textContent = borderCountry.name;
       detailsBorders.appendChild(borderButton);
     });
+  }
+}
+
+function openDetailsModal(open: boolean = true) {
+  if (detailsModal) {
+    detailsModal.open = open;
   }
 }
 
