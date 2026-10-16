@@ -30,6 +30,8 @@ const detailsLanguages = document.getElementById("details-languages");
 const detailsBorders = document.getElementById("details-borders");
 
 let countryArray: Country[] = [];
+let startCountryIndex = 0
+const countriesShownAmount = 8
 
 //Toggle light/dark mode on button click
 validateListener(lightModeButton, "click", () => {
@@ -64,40 +66,45 @@ async function onStartup() {
   }
   //Add index to country array for later lookups
   countryArray.forEach((country, index) => (country.index = index));
-
-  //Clear country item template in html
-  if (countryList) countryList.textContent = "";
-  console.log(countryArray[30]);
-  addCountryitem(1);
-  addCountryitem(2);
-  //populateDetailsPage(1);
-  //if (detailsModal) {
-  //  detailsModal.open = true;
-  //}
+  renderCountryList();
 }
 
 onStartup();
+
+function renderCountryList() {
+  //Clear country item template in html
+  if (countryList) countryList.textContent = "";
+  for(let i = startCountryIndex; i < startCountryIndex + countriesShownAmount; i++){
+    addCountryitem(i)
+  }
+}
 
 function addCountryitem(index: number) {
   if (countryList && countryItemTemplate) {
     const countryData = countryArray[index] as Country;
     const newCountryItem = countryItemTemplate.cloneNode(true) as HTMLElement;
-    
-    const countryImg = newCountryItem.querySelector(".country-image") as HTMLImageElement;
+
+    const countryImg = newCountryItem.querySelector(
+      ".country-image",
+    ) as HTMLImageElement;
     if (countryImg) countryImg.src = countryData.flagUrl;
-    
+
     const countryName = newCountryItem.querySelector(".country-name");
     if (countryName) countryName.textContent = countryData.name;
-    
-    const countryPopulation = newCountryItem.querySelector(".country-population");
-    if (countryPopulation) countryPopulation.textContent = countryData.population.toLocaleString("en-US");
-    
+
+    const countryPopulation = newCountryItem.querySelector(
+      ".country-population",
+    );
+    if (countryPopulation)
+      countryPopulation.textContent =
+        countryData.population.toLocaleString("en-US");
+
     const countryRegion = newCountryItem.querySelector(".country-region");
     if (countryRegion) countryRegion.textContent = countryData.region;
-    
+
     const countryCapital = newCountryItem.querySelector(".country-capital");
     if (countryCapital) countryCapital.textContent = countryData.capital;
-    
+
     countryList.appendChild(newCountryItem);
   }
 }

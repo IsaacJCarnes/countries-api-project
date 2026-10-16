@@ -69,7 +69,19 @@ h1 {
 }
 
 /* Country List */
-#filter-section{
+
+#country-list-section{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  width: 100%;
+  height: calc(100% - 40px);
+  
+}
+#filter-section {
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -94,7 +106,7 @@ h1 {
   font-weight: 300;
 }
 
-#filter-region{
+#filter-region {
   padding: 5px 20px;
   display: flex;
   margin: 0px;
@@ -102,8 +114,12 @@ h1 {
   font-weight: 300;
 }
 
-#country-list{
-  display: flex;
+#country-list {
+  position: relative;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 40px;
   padding: 0px;
 }
@@ -111,8 +127,8 @@ h1 {
 .country-item {
   display: flex;
   flex-direction: column;
-  width: fit-content;
-  height: fit-content;
+  width: 250px;
+  height: 324px;
   overflow: hidden;
   list-style-type: none;
   font-size: 14px;
@@ -120,20 +136,23 @@ h1 {
   padding-bottom: 30px;
 }
 
-.country-item>*{
+.country-item > * {
   margin-left: 20px;
 }
 
-.country-item img{
+.country-item img {
   width: 250px;
-  height: auto;
+  height: 167px;
   margin-left: 0px;
-  max-height: 167px;
-  object-fit: cover;
+  object-fit: fill;
   object-position: top;
 }
 
-.country-item h3{
+.country-item img[src=""]{
+  visibility: hidden;
+}
+
+.country-item h3 {
   font-size: large;
   margin: 15px 20px;
 }
