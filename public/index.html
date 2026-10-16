@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countries List</title>
+  <link rel="icon" type="image/png" href="../assets/earth-americas-solid.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Outfit:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="utility.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="script.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Where in the world?</h1>
+
+    <button id="light-mode-button">
+      <span id="light-mode-icon" class="fa fa-regular fa-moon"></span>
+      <span>Dark Mode</span>
+    </button>
+  </header>
+  <main>
+    <section id="country-list-section">
+      <section id="filter-section">
+        <div id="filter-name" class="basicElement">
+          <span class="fa fa-magnifying-glass"></span>
+          <input id="filter-search" placeholder="Search for a country..." />
+        </div>
+        <select id="filter-region" class="basicElement">
+          <option value="" selected>Filter by Region</option>
+          <option value="Africa">Africa</option>
+          <option value="America">America</option>
+          <option value="Asia">Asia</option>
+          <option value="Europe">Europe</option>
+          <option value="Oceania">Oceania</option>
+        </select>
+      </section>
+      <ul id="country-list">
+        <li class="country-item basicElement">
+          <image class="country-image" src=""></image>
+          <h3 class="country-name"></h3>
+          <dl>
+            <dt>Population: </b>
+            <dd class="country-population"></dd>
+          </dl>
+          <dl>
+            <dt>Region: </b>
+            <dd class="country-region"></dd>
+          </dl>
+          <dl>
+            <dt>Capital: </b>
+            <dd class="country-capital"></dd>
+          </dl>
+        </li>
+      </ul>
+    </section>
+    <details>
+      <summary></summary>
+      <button class="txt-sm basicElement" id="details-back"><span class="fa fa-arrow-left"></span>Back</button>
+      <section class="fill">
+        <image id="details-image"></image>
+        <div class="flx-col" id="details-holder">
+          <h3 id="details-name"></h3>
+          <ul>
+            <dl>
+              <dt>Native Name: </b>
+              <dd id="details-native"></dd>
+            </dl>
+            <dl>
+              <dt>Population: </b>
+              <dd id="details-population"></dd>
+            </dl>
+            <dl>
+              <dt>Region: </b>
+              <dd id="details-region"></dd>
+            </dl>
+            <dl>
+              <dt>Subregion: </b>
+              <dd id="details-subregion"></dd>
+            </dl>
+            <dl>
+              <dt>Capital: </b>
+              <dd id="details-capital"></dd>
+            </dl>
+            <dl>
+              <dt>Top Level Domain:</b>
+              <dd id="details-tlds"></dd>
+            </dl>
+            <dl>
+              <dt>Currencies: </b>
+              <dd id="details-currencies"></dd>
+            </dl>
+            <dl>
+              <dt>Languages: </b>
+              <dd id="details-languages"></dd>
+            </dl>
+          </ul>
+          <dl>
+            <dt>Border Countries:</dt>
+            <dd id="details-borders"></dd>
+          </dl>
+        </div>
+      </section>
+    </details>
+  </main>
+</body>
+
+</html>
